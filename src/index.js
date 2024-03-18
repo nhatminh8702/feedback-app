@@ -23,7 +23,7 @@ const router = createBrowserRouter([
         element: <Question />,
       },
       {
-        path: "use-management",
+        path: "account",
         element: <UserManagement />,
       },
     ],

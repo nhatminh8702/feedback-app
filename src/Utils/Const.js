@@ -11,6 +11,11 @@ const HEADER_TAB = [
     name: "Question",
     link: "/question",
   },
+  {
+    id: 3,
+    name: "Account Management",
+    link: "/account",
+  },
 ];
 
 export { HEADER_TAB, HEADER_TITLE };

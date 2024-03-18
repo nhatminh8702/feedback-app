@@ -1,6 +1,76 @@
 import { useEffect, useState } from "react";
 import "./Feedback.css";
-function Feedback() {
+import { Box } from "@mui/material";
+
+// criteria: [
+//   {
+//     id: 1,
+//     name: "Regarding the teacher's punctuality",
+//     score: 0,
+//     ratingScale: [
+//       { id: 1, score: 5, description: "Always punctual" },
+//       { id: 1, score: 4, description: "Mostly punctual" },
+//       { id: 1, score: 2, description: "Rarely punctual" },
+//       { id: 1, score: 1, description: "Not at all punctual" }
+//     ],
+//   },
+//   {
+//     id: 2,
+//     name: "The teacher adequately covers the topics required by the syllabus",
+//     score: 0,
+//     ratingScale: [
+//       { id: 1, score: 5, description: "Fully covered" },
+//       { id: 1, score: 4, description: "Mostly covered" },
+//       { id: 1, score: 2, description: "Partially covered" },
+//       { id: 1, score: 1, description: "Not at all covered" }
+//     ],
+//   },
+//   {
+//     id: 3,
+//     name: "Teacher's response to student's questions in class",
+//     score: 0,
+//     ratingScale: [
+//       { id: 1, score: 5, description: "Always punctual" },
+//       { id: 1, score: 4, description: "Mostly punctual" },
+//       { id: 1, score: 2, description: "Rarely punctual" },
+//       { id: 1, score: 1, description: "Not at all punctual" }
+//     ],
+//   },
+//   {
+//     id: 4,
+//     name: "Answered immediately or just after the session",
+//     score: 0,
+//     ratingScale: [
+//       { id: 1, score: 5, description: "Answered immediately or just after the session" },
+//       { id: 1, score: 4, description: "Answered in the next session" },
+//       { id: 1, score: 2, description: "Some queries left unanswered" },
+//       { id: 1, score: 1, description: "Most queries left unanswered" }
+//     ],
+//   },
+// ],
+
+const requestData = [
+  {
+    id: 1,
+    subject: "PRN231",
+    className: "SE1625",
+    teacher: "Hoang Thanh Phong",
+  },
+  {
+    id: 2,
+    subject: "PRN221",
+    className: "SE1625",
+    teacher: "Hoang Thanh Phong",
+  },
+  {
+    id: 3,
+    subject: "DBI202",
+    class: "MKT1627",
+    teacher: "Trieu Dinh Chien",
+  },
+];
+
+const Feedback = () => {
   const [productsList, setProductsList] = useState([]);
   const [inputProduct, setInputProduct] = useState({
     productId: 0,
@@ -29,44 +99,7 @@ function Feedback() {
     //   });
   }, []);
 
-  return (
-    <div>
-      <table className="product-table">
-        <thead>
-          <tr className="table-header">
-            <th>Name</th>
-            <th>Price</th>
-            <th>InStock</th>
-            <th>Category</th>
-          </tr>
-        </thead>
-        <tbody>
-          {productsList.map((p) => (
-            <tr
-              key={p.productId}
-              onClick={() => handleOnClickField(p.productId)}
-            >
-              <th>{p.productName}</th>
-              <th>{p.unitPrice}</th>
-              <th>{p.unitsInStock}</th>
-              <th>{p.categoryId}</th>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      <div className="form-input">
-        <div className="input-field">
-          <div className="label">Name: </div>
-          <input
-            className="input-box"
-            value={inputProduct.productName}
-            onChange={(e) => handleInputChange("productName", e.target.value)}
-          />
-        </div>
-      </div>
-    </div>
-  );
-}
+  return <Box></Box>;
+};
 
 export default Feedback;
