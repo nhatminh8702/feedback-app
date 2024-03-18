@@ -1,23 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import { Outlet } from "react-router-dom";
+import "./App.css";
+import HeaderBar from "./Components/HeaderBar/HeaderBar";
+import LeftSideBar from "./Components/LeftSideBar/LeftSideBar";
+import { HEADER_TAB, HEADER_TITLE } from "./Utils/Const";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="header">
+        <HeaderBar headerTitle={HEADER_TITLE} tabLists={HEADER_TAB} />
+      </div>
+      <div className="body">
+        {/* <div className="sidebar">
+          <div className="container">
+            <LeftSideBar />
+          </div>
+        </div> */}
+        <div className="main-display">
+          <Outlet />
+        </div>
+      </div>
     </div>
   );
 }
