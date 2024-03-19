@@ -10,53 +10,6 @@ import {
 } from "@mui/material";
 import FeedBackModal from "../../Components/FeedBackModal/FeedBackModal";
 
-// criteria: [
-//   {
-//     id: 1,
-//     name: "Regarding the teacher's punctuality",
-//     score: 0,
-//     ratingScale: [
-//       { id: 1, score: 5, description: "Always punctual" },
-//       { id: 1, score: 4, description: "Mostly punctual" },
-//       { id: 1, score: 2, description: "Rarely punctual" },
-//       { id: 1, score: 1, description: "Not at all punctual" }
-//     ],
-//   },
-//   {
-//     id: 2,
-//     name: "The teacher adequately covers the topics required by the syllabus",
-//     score: 0,
-//     ratingScale: [
-//       { id: 1, score: 5, description: "Fully covered" },
-//       { id: 1, score: 4, description: "Mostly covered" },
-//       { id: 1, score: 2, description: "Partially covered" },
-//       { id: 1, score: 1, description: "Not at all covered" }
-//     ],
-//   },
-//   {
-//     id: 3,
-//     name: "Teacher's response to student's questions in class",
-//     score: 0,
-//     ratingScale: [
-//       { id: 1, score: 5, description: "Always punctual" },
-//       { id: 1, score: 4, description: "Mostly punctual" },
-//       { id: 1, score: 2, description: "Rarely punctual" },
-//       { id: 1, score: 1, description: "Not at all punctual" }
-//     ],
-//   },
-//   {
-//     id: 4,
-//     name: "Answered immediately or just after the session",
-//     score: 0,
-//     ratingScale: [
-//       { id: 1, score: 5, description: "Answered immediately or just after the session" },
-//       { id: 1, score: 4, description: "Answered in the next session" },
-//       { id: 1, score: 2, description: "Some queries left unanswered" },
-//       { id: 1, score: 1, description: "Most queries left unanswered" }
-//     ],
-//   },
-// ],
-
 const requestData = [
   {
     id: 1,
@@ -114,24 +67,17 @@ const Feedback = () => {
     setOpenFeedBackModal(true);
   };
 
+  const handleSubmitFeedBack = (data) => {
+    console.log(data);
+  };
+
   const handleInputChange = (key, value) => {};
 
   const handleOnClickField = (id) => {
     //setInputProduct(productsList.find((p) => p.productId === id));
   };
 
-  useEffect(() => {
-    // fetch("https://localhost:7293/api/Products", {
-    //   method: "GET",
-    // })
-    //   .then((res) => {
-    //     return res.json();
-    //   })
-    //   .then((data) => {
-    //     console.log(data);
-    //     setProductsList(data);
-    //   });
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <Box sx={{ textAlign: "start", marginTop: 4, marginLeft: 3 }}>
@@ -164,10 +110,11 @@ const Feedback = () => {
         ))}
       </Box>
       <FeedBackModal
-        title={"Feed Back"}
+        title={"FeedBack"}
         feedBackId={feedBackId}
         open={openFeedBackModal}
         onClose={handleCloseModal}
+        onSubmit={handleSubmitFeedBack}
       />
     </Box>
   );
