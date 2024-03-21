@@ -9,66 +9,66 @@ import {
   Typography,
 } from "@mui/material";
 import FeedBackModal from "../../Components/FeedBackModal/FeedBackModal";
-
-const requestData = [
-  {
-    id: 1,
-    subject: "PRN231",
-    className: "SE1625",
-    teacher: "Hoang Thanh Phong",
-  },
-  {
-    id: 2,
-    subject: "PRN221",
-    className: "SE1625",
-    teacher: "Hoang Thanh Phong",
-  },
-  {
-    id: 3,
-    subject: "DBI202",
-    className: "MKT1627",
-    teacher: "Trieu Dinh Chien",
-  },
-  {
-    id: 4,
-    subject: "DBI202",
-    className: "MKT1627",
-    teacher: "Trieu Dinh Chien",
-  },
-  {
-    id: 5,
-    subject: "DBI202",
-    className: "MKT1627",
-    teacher: "Trieu Dinh Chien",
-  },
-  {
-    id: 6,
-    subject: "DBI202",
-    className: "MKT1627",
-    teacher: "Trieu Dinh Chien",
-  },
-];
+import { useNavigate } from "react-router-dom";
 
 const Feedback = () => {
-  const [feedBackList, setFeedBackList] = useState(requestData);
-  const [feedBackId, setFeedBackId] = useState(0);
+  const [feedBackList, setFeedBackList] = useState([]);
   const [openFeedBackModal, setOpenFeedBackModal] = useState(false);
-
+  const [selectedFeedBack, setSelectedFeedBack] = useState({});
+  const navigate = useNavigate();
   const displayData = useMemo(() => {
     return feedBackList;
   }, [feedBackList]);
+
+  const fetchFeedback = async () => {
+    try {
+      const userId = sessionStorage.getItem("userId");
+      const response = await fetch(
+        "http://localhost:5209/api/FeedBack/GetFeedBack/" + userId
+      );
+      let data = await response.json();
+      await setFeedBackList(data);
+    } catch (ex) {
+      console.log(ex);
+    }
+  };
+
+  async function postData(url = "", data = {}) {
+    // Default options are marked with *
+    console.log(data);
+    const response = await fetch(url, {
+      method: "POST", // *GET, POST, PUT, DELETE, etc.
+      mode: "cors", // no-cors, *cors, same-origin
+      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+      credentials: "same-origin", // include, *same-origin, omit
+      headers: {
+        "Content-Type": "application/json",
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      redirect: "follow", // manual, *follow, error
+      referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+      body: JSON.stringify(data), // body data type must match "Content-Type" header
+    });
+    console.log(response.status);
+  }
 
   const handleCloseModal = () => {
     setOpenFeedBackModal(false);
   };
 
-  const handleClickTakeFeedBack = (id) => {
-    setFeedBackId(id);
+  const handleClickTakeFeedBack = (item) => {
+    setSelectedFeedBack(item);
     setOpenFeedBackModal(true);
   };
 
   const handleSubmitFeedBack = (data) => {
-    console.log(data);
+    postData("http://localhost:5209/api/FeedBack/GiveFeedBack", {
+      classId: selectedFeedBack.class.id,
+      teacherId: selectedFeedBack.teacher.id,
+      studentId: Number.parseInt(sessionStorage.getItem("userId")),
+      teacherScore: data.teacherScore,
+    });
+    setOpenFeedBackModal(false);
   };
 
   const handleInputChange = (key, value) => {};
@@ -77,7 +77,12 @@ const Feedback = () => {
     //setInputProduct(productsList.find((p) => p.productId === id));
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (sessionStorage.getItem("userId") == null) {
+      navigate("/login");
+    }
+    fetchFeedback();
+  }, []);
 
   return (
     <Box sx={{ textAlign: "start", marginTop: 4, marginLeft: 3 }}>
@@ -93,14 +98,16 @@ const Feedback = () => {
                   {item.subject}
                 </Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  Class: {item.className}
+                  Class: {item.class.name}
                 </Typography>
-                <Typography variant="body2">Teacher: {item.teacher}</Typography>
+                <Typography variant="body2">
+                  Teacher: {item.teacher.name}
+                </Typography>
               </CardContent>
               <CardActions>
                 <Button
                   size="small"
-                  onClick={() => handleClickTakeFeedBack(item.id)}
+                  onClick={() => handleClickTakeFeedBack(item)}
                 >
                   GIve FeedBack
                 </Button>
@@ -109,13 +116,15 @@ const Feedback = () => {
           </Box>
         ))}
       </Box>
-      <FeedBackModal
-        title={"FeedBack"}
-        feedBackId={feedBackId}
-        open={openFeedBackModal}
-        onClose={handleCloseModal}
-        onSubmit={handleSubmitFeedBack}
-      />
+      {openFeedBackModal && (
+        <FeedBackModal
+          title={"FeedBack"}
+          open={openFeedBackModal}
+          onClose={handleCloseModal}
+          onSubmit={handleSubmitFeedBack}
+          displayInformation={selectedFeedBack}
+        />
+      )}
     </Box>
   );
 };

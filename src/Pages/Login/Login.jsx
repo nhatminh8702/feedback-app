@@ -14,21 +14,54 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm();
   const [showPassword, setShowPassword] = useState(false);
+  const [responseCode, setResponseStatusCode] = useState();
+  const navigate = useNavigate();
+
   const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  async function postData(url = "", data = {}) {
+    // Default options are marked with *
+    const response = await fetch(url, {
+      method: "POST", // *GET, POST, PUT, DELETE, etc.
+      mode: "cors", // no-cors, *cors, same-origin
+      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+      credentials: "same-origin", // include, *same-origin, omit
+      headers: {
+        "Content-Type": "application/json",
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      redirect: "follow", // manual, *follow, error
+      referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+      body: JSON.stringify(data), // body data type must match "Content-Type" header
+    });
+    setResponseStatusCode(response.status);
+    if (response.ok) {
+      var data = await response.json();
+      sessionStorage.setItem("role", data.role);
+      sessionStorage.setItem("userId", data.id);
+      navigate("/feedback");
+    } else {
+      setError("email", { type: "custom", message: "Account not exist" });
+    }
+  }
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
 
-  const onSubmit = (data) => {};
+  const onSubmit = (data) => {
+    postData("http://localhost:5209/api/Users/login", { ...data });
+  };
 
   return (
     <div className="login-page">
@@ -40,11 +73,11 @@ const Login = () => {
           variant="filled"
           size="small"
           sx={{ m: 1, width: "320px" }}
-          {...register("email", { required: true })}
+          {...register("email", {
+            required: { value: true, message: "Email is required" },
+          })}
           error={errors.email != null}
-          helperText={
-            errors?.email?.type === "required" ? "Email is required" : ""
-          }
+          helperText={errors?.email?.message}
         />
 
         <FormControl
